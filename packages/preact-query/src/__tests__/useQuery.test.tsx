@@ -5896,8 +5896,10 @@ describe('useQuery', () => {
     })
 
     it('should not fetch the previous key when subscribing in the same render as a key change', async () => {
-      const key = queryKey()
-      const queryFn = vi.fn((filter: string) => sleep(10).then(() => filter))
+      const key = createKey()
+      const queryFn = vi.fn<(filter: string) => Promise<string>>((filter) =>
+        sleep(10).then(() => filter),
+      )
 
       function Page({
         filter,
@@ -5927,7 +5929,7 @@ describe('useQuery', () => {
       await vi.advanceTimersByTimeAsync(11)
       expect(rendered.getByText('data: b')).toBeInTheDocument()
 
-      expect(queryFn.mock.calls).toEqual([['b']])
+      expect(queryFn.mock.calls).toStrictEqual([['b']])
     })
 
     it('should not optimistically show fetching when subscribed is false', () => {

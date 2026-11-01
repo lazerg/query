@@ -7056,8 +7056,10 @@ describe('useQuery', () => {
   })
 
   it('should not fetch the previous key when a hidden Activity with a changed key is revealed', async () => {
-    const key = queryKey()
-    const queryFn = vi.fn((filter: string) => sleep(10).then(() => filter))
+    const key = createKey()
+    const queryFn = vi.fn<(filter: string) => Promise<string>>((filter) =>
+      sleep(10).then(() => filter),
+    )
 
     function Page({ filter }: { filter: string }) {
       const { data } = useQuery({
@@ -7093,6 +7095,6 @@ describe('useQuery', () => {
     await vi.advanceTimersByTimeAsync(11)
     expect(rendered.getByText('data: b')).toBeInTheDocument()
 
-    expect(queryFn.mock.calls).toEqual([['a'], ['b']])
+    expect(queryFn.mock.calls).toStrictEqual([['a'], ['b']])
   })
 })
