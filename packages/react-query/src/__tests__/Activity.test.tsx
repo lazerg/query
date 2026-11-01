@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act } from '@testing-library/react'
 import * as React from 'react'
-import { queryKey, sleep } from '@tanstack/query-test-utils'
+import { createKey, sleep } from '@tanstack/query-test-utils'
 import {
   QueryClient,
   useQueries,
@@ -49,7 +49,7 @@ describe.each([
   })
 
   it('should not fetch the old key when revealed after a hidden key change', async () => {
-    const key = queryKey()
+    const key = createKey()
     const fetched: Array<string> = []
 
     function Page({ filter }: { filter: string }) {
